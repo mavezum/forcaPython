@@ -1,58 +1,60 @@
 from random import randrange
-from math import floor
 from forcaFigura import desenharFigura
 
-palavras = ["carteira", "conversa", "python", "benhe", "programar", "cobra", "serie"]
-palavraAleatoria = palavras[randrange(len(palavras))]
-#print(palavraAleatoria)
+possiveisPalavras = ["serie", "cobra", "python", "panda", "carteira", "livro", "mapa"]
 
-print('_'*len(palavraAleatoria))
+#gera indice aleatorio
+indiceAleatorio = randrange(len(possiveisPalavras))
+palavra = possiveisPalavras[indiceAleatorio]
 
-todasLetrasAdvinhadas = []
-letrasErradas = 0
+#print(palavra)
+
+print('_'*len(palavra)) 
+
+letrasAdvinhadas = []
 tentativasTotais = 6
+letrasErradas = 0
+tentativasRestantes = tentativasTotais
 
-#cada rodada do jogo
-while(true):
-	#Ler input do usuario
-	print("Advinhe uma letra: ")
+while(tentativasRestantes > 0):
+	letrasFaltando = 0
+	print("Advinhe uma letra:")
 	letraNova = input()
 
-	#Assegurar que somente uma letra foi digitada, e não varias
-	while(len(letraNova)!=1):
-		print("Advinhe somente uma unica letra!")
+	#validando um unico caracter
+	while((len(letraNova)!= 1)):
+		print("Advinhe *somente* uma letra:")
 		letraNova = input()
 
-	#Salvar letra advinhada nova
-	todasLetrasAdvinhadas = todasLetrasAdvinhadas + [letraNova]
-	
-	#verificar se a letra nova existe na palavra
-	if(palavraAleatoria.find(letraNova) < 0):
-		letrasErradas = letrasErradas+1
+	letrasAdvinhadas = letrasAdvinhadas + [letraNova]
 
-	#escrever a palavra com os espacos em branco, ou as letras advinhadas
-	letrasFaltando = 0
-	for letra in palavraAleatoria:
-		if letra in todasLetrasAdvinhadas:
+	#checar se a letra nova sequer existe n
+	if(palavra.find(letraNova) < 0):
+		letrasErradas = letrasErradas + 1
+
+	tentativasRestantes = tentativasTotais - letrasErradas
+	#checando se cada letra advinhada existem na palavra
+	for letra in palavra:
+		if letra in letrasAdvinhadas:
 			print(letra, end="")
 		else:
 			print('_', end="")
 			letrasFaltando = letrasFaltando+1
+
 	print("")
 
+	print("Letras advinhadas até agora:")
+	print(letrasAdvinhadas)
 
-	tentativasRestantes = tentativasTotais - letrasErradas
+	#usar a funcao desenharFigura
+	desenharFigura(letrasErradas)
 
+	#checar se restam alternativas
+	if(tentativasRestantes < 1):
+		print("Voce perdeu! Fim de jogo :(")
+		break
+
+	#checar se restam letras faltando
 	if(letrasFaltando==0):
 		print("Parabens! Voce ganhou!")
-		break
-	
-	desenharFigura(letrasErradas)
-	print("Letras advinhadas:")
-	print(todasLetrasAdvinhadas)
-
-	if tentativasRestantes > 0:
-		print("Voce ainda tem", tentativasRestantes, "alternativas")
-	else:
-		print("Voce perdeu!")
 		break
